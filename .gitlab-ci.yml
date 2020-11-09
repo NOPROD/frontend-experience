@@ -14,7 +14,7 @@ build:
     - master
   artifacts:
     paths:
-      - build
+      - dist
 
 deploy:
   stage: deploy
