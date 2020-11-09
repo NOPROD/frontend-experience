@@ -1,4 +1,4 @@
-# justamusicgame
+# front-end experience
 
 ## Project setup
 
