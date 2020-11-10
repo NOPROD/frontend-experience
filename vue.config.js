@@ -3,9 +3,16 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .tap(options => {
-        options.transformAssetUrls = { audio: 'src' }
-        return options
-      })
+      .end()
+
+    config.module
+      .rule('glsl')
+      .test(/\.glsl$/)
+      .use('raw')
+      .loader('raw-loader')
+      .end()
+      .use('glslify')
+      .loader('glslify-loader')
+      .end()
   }
 }
