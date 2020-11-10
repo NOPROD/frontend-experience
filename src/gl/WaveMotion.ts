@@ -46,10 +46,12 @@ export class WaveMotion {
     this.camera.position.z = 1
 
     this.renderer = new WebGLRenderer({
+      //@ts-ignore
       canvas: document.getElementById('logo'),
       antialias: true
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+    //@ts-ignore
     this.renderer.setClearColor(0xffffff, 1)
 
     this.clock = new Clock()
