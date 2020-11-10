@@ -1,5 +1,7 @@
 <template>
-  <div class="flex-col"><LgSvg :path="paper" /><canvas id="logo"></canvas></div>
+  <div class="flex-col">
+    <SvgObject :path="paper" /><canvas id="logo"></canvas>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,9 +11,9 @@
 
   import { load } from '@/services/Svg'
 
-  import LgSvg from './gl/Svg'
+  import SvgObject from './gl/SvgObject.vue'
 
-  @Component({ components: { LgSvg } })
+  @Component({ components: { SvgObject } })
   export default class Home extends Vue {
     public paper: string = '/logo/paper.svg'
 
