@@ -18,9 +18,9 @@
     public paper: string = '/logo/paper.svg'
 
     mounted() {
-      var wave = new WaveMotion()
-      wave.init()
-      wave.run()
+      // var wave = new WaveMotion()
+      // wave.init()
+      // wave.run()
     }
   }
 </script>

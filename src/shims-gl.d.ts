@@ -1,3 +1,5 @@
 declare module '*.glsl'
 declare module '*.fs'
 declare module '*.vs'
+declare module 'three/examples/jsm/libs/dat.gui.module.js'
+declare module 'three-simplicial-complex'

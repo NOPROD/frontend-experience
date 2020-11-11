@@ -16,9 +16,9 @@ uniform vec2 resolution;
 uniform vec3 color;
 uniform float Cube_Edges_brightness;
 uniform float falloff;
-varying vec2 Star_Swamp_vUv;
-varying vec3 Star_Swamp_vPosition;
-varying vec3 Star_Swamp_vNormal;
+vec2 Star_Swamp_vUv;
+vec3 Star_Swamp_vPosition;
+vec3 Star_Swamp_vNormal;
 
 float field(in vec3 p) 
 {
@@ -45,17 +45,17 @@ vec3 nrand3(vec2 co)
     return c;
 }
 
-varying vec2 Parallax_Starfield_vUv;
+vec2 Parallax_Starfield_vUv;
 
 float starrand(float seedx, float seedy, int seedp) 
 {
     return 0.05 + 0.9 * fract(sin(float(seedp) * 437.234) * 374.2542 - cos(seedx * 432.252) * 23.643 + sin(seedy * 73.2454) * 372.23455);
 }
 
-varying vec3 Cube_Edges_vPosition;
-varying vec3 Cube_Edges_vNormal;
-varying vec2 Cube_Edges_vUv;
-varying vec2 Cube_Edges_vUv2;
+vec3 Cube_Edges_vPosition;
+vec3 Cube_Edges_vNormal;
+vec2 Cube_Edges_vUv;
+vec2 Cube_Edges_vUv2;
 
 vec4 Star_Swamp_main() 
 {

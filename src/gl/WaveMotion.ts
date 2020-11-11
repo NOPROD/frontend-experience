@@ -10,6 +10,8 @@ import {
   ShaderMaterial,
   SpotLight,
   TextureLoader,
+  Vector2,
+  BoxGeometry,
   WebGLRenderer
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -43,7 +45,7 @@ export class WaveMotion {
       0.1,
       100
     )
-    this.camera.position.z = 1
+    this.camera.position.z = -1
 
     this.renderer = new WebGLRenderer({
       //@ts-ignore
@@ -66,24 +68,17 @@ export class WaveMotion {
 
   public run() {
     window.requestAnimationFrame(this.run.bind(this))
-    this.render()
-  }
-
-  private render() {
     this.material.uniforms.uTime.value = this.clock.getElapsedTime()
     this.renderer.render(this.scene, this.camera)
   }
 
   private createMesh() {
-    this.geometry = new PlaneGeometry(0.4, 0.6, 32, 32)
+    this.geometry = new BoxGeometry(200, 200, 1)
     this.material = new ShaderMaterial({
       vertexShader: Starfield,
       fragmentShader: SpaceFog,
       uniforms: {
-        uTime: { value: 0.5 },
-        uTexture: {
-          value: new TextureLoader().load('/logo/sample.jpg')
-        }
+        uTime: { value: 0.0 }
       },
       // wireframe: true,
       side: DoubleSide
@@ -91,6 +86,7 @@ export class WaveMotion {
     this.mesh = new Mesh(this.geometry, this.material)
     this.scene.add(this.mesh)
     this.scene.add(this.light)
+    this.light.lookAt(this.mesh.position)
   }
 
   private addEvents(): void {

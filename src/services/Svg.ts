@@ -1,52 +1,35 @@
-import {
-  DoubleSide,
-  Group,
-  Mesh,
-  MeshBasicMaterial,
-  ShapeBufferGeometry
-} from 'three'
-import { SVGLoader, SVGResult } from 'three/examples/jsm/loaders/SVGLoader.js'
+import * as THREE from 'three'
+import loadSvg from 'load-svg'
+import parsePath from 'extract-svg-path'
+import svgMesh3d from 'svg-mesh-3d'
+import Complex from 'three-simplicial-complex'
 
-const loader = new SVGLoader()
+const complex = new Complex(THREE)
 
 // load svg, get all <path> data, convert to mesh, add to Object3D group and return it
 export const load = async (path: string) => {
   return new Promise((res, rej) => {
-    loader.load(
-      path,
-      (data: SVGResult) => {
-        if (data.paths.length === 0) throw 'Error on load'
-        const paths = data.paths
-        const group = new Group()
+    loadSvg('/logo/paper.svg', (err: any, svg: any) => {
+      if (err) rej(err)
+      const svgPath = parsePath.parse(svg)
+      const svgMesh = svgMesh3d(svgPath, {
+        delaunay: false,
+        scale: 4
+      })
+      const geometry = complex(svgMesh)
 
-        for (let i = 0; i < paths.length; i++) {
-          const path = paths[i]
-
-          const material = new MeshBasicMaterial({
-            color: path.color,
-            side: DoubleSide,
-            depthWrite: false
-          })
-
-          const shapes = path.toShapes(true)
-
-          for (let j = 0; j < shapes.length; j++) {
-            const shape = shapes[j]
-            const geo = new ShapeBufferGeometry(shape)
-
-            const mesh = new Mesh(geo, material)
-
-            group.add(mesh)
-          }
+      const material = new THREE.ShaderMaterial({
+        side: THREE.DoubleSide,
+        transparent: false,
+        uniforms: {
+          opacity: { value: 1 },
+          scale: { value: 0 },
+          animate: { value: 0 }
         }
-        res(group)
-      },
-      (progress: ProgressEvent<EventTarget>) => {
-        console.log((progress.loaded / progress.total) * 100 + '% loaded')
-      },
-      (err: ErrorEvent) => {
-        rej(err)
-      }
-    )
+      })
+
+      const mesh = new THREE.Mesh(geometry, material)
+      res(mesh)
+    })
   })
 }

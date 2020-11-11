@@ -10,8 +10,12 @@
   "dependencies": {
     "ant-design-vue": "^1.7.2",
     "core-js": "^3.6.5",
+    "extract-svg-path": "^2.1.0",
     "gsap": "^3.5.1",
+    "load-svg": "^1.0.0",
+    "svg-mesh-3d": "^1.1.0",
     "three": "^0.121.1",
+    "three-simplicial-complex": "^69.0.6",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-i18n": "^8.21.0",
