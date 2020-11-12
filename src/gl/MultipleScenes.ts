@@ -1,5 +1,3 @@
-import { onResize } from '@/gl-utils'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 import {
   PerspectiveCamera,
@@ -15,19 +13,23 @@ class MultipleScenes {
   private sceneElements: any[] = []
   private renderer!: Renderer
 
-  public init(elements: NodeListOf<Element>) {
-    const canvas = document.createElement('canvas')
-    this.renderer = new WebGLRenderer({
-      canvas,
-      alpha: true,
-      preserveDrawingBuffer: true
-    })
+  public async init(elements: NodeListOf<Element>): Promise<boolean> {
+    return new Promise(res => {
+      const canvas = document.createElement('canvas')
+      this.renderer = new WebGLRenderer({
+        canvas,
+        alpha: true,
+        preserveDrawingBuffer: true
+      })
 
-    elements.forEach(async (elem: Element) => {
-      const sceneRender = await this.sceneInit(elem)
-      const ctx = document.createElement('canvas').getContext('2d')
-      elem.appendChild(ctx?.canvas)
-      this.sceneElements.push({ elem, ctx, sceneRender })
+      elements.forEach(async (elem: Element) => {
+        const sceneRender = await this.sceneInit(elem)
+        const ctx = document.createElement('canvas').getContext('2d')
+        elem.appendChild(ctx?.canvas)
+        this.sceneElements.push({ elem, ctx, sceneRender })
+      })
+
+      res(true)
     })
   }
 
@@ -38,14 +40,13 @@ class MultipleScenes {
     await load(`/logo/${elem.dataset.sceneName}.svg`).then((svgMesh: any) => {
       scene.add(svgMesh)
     })
-    console.log(scene)
     return () => {
       camera.updateProjectionMatrix()
       this.renderer.render(scene, camera)
     }
   }
 
-  private makeScene(elem: Element) {
+  private makeScene() {
     const scene = new Scene()
     scene.background = new Color(0xb0b0b0)
 
@@ -70,8 +71,6 @@ class MultipleScenes {
   }
 
   public render(time?: number) {
-    time *= 0.001
-
     for (const { elem, ctx, sceneRender } of this.sceneElements) {
       // get the viewport relative position of this element
       const rect = elem.getBoundingClientRect()

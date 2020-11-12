@@ -14,5 +14,7 @@ module.exports = {
       .use('glslify')
       .loader('glslify-loader')
       .end()
+
+    config.resolve.alias.set('request$', 'xhr').end()
   }
 }

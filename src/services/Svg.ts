@@ -9,8 +9,9 @@ const complex = new Complex(THREE)
 // load svg, get all <path> data, convert to mesh, add to Object3D group and return it
 export const load = async (path: string) => {
   return new Promise((res, rej) => {
-    console.log(path)
     loadSvg(path, (err: any, svg: any) => {
+      console.log(svg)
+      console.log(err)
       if (err) rej(err)
       const svgPath = parsePath.parse(svg)
       const svgMesh = svgMesh3d(svgPath, {

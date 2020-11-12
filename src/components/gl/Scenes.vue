@@ -20,11 +20,9 @@
     @Prop()
     public scenesData!: Scenes[]
 
-    mounted() {
-      setTimeout(() => {
-        multipleScenes.init(document.querySelectorAll('[data-scene-name]'))
-        multipleScenes.render()
-      }, 0)
+    async mounted() {
+      await multipleScenes.init(document.querySelectorAll('[data-scene-name]'))
+      multipleScenes.render()
     }
   }
 </script>
