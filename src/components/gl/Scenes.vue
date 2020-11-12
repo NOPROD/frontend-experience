@@ -1,5 +1,6 @@
 <template>
   <div class="flex-col">
+    <div v-if="load">load</div>
     <div
       v-for="(scene, key) in scenesData"
       :key="key"
@@ -20,9 +21,17 @@
     @Prop()
     public scenesData!: Scenes[]
 
-    async mounted() {
-      await multipleScenes.init(document.querySelectorAll('[data-scene-name]'))
-      multipleScenes.render()
+    public load: boolean = true
+
+    mounted() {
+      console.time('init')
+      console.time('outsideinit')
+      multipleScenes
+        .init(document.querySelectorAll('[data-scene-name]'))
+        .then(() => {
+          multipleScenes.render()
+        })
+      console.timeEnd('outsideinit')
     }
   }
 </script>

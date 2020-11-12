@@ -65,8 +65,8 @@ class MultipleScenes {
       const rect = elem.getBoundingClientRect()
       var { left, right, top, bottom, width, height } = rect
       const rendererCanvas = this.renderer.domElement
-      width = 500
-      height = 500
+      width = 30
+      height = 30
       const isOffscreen =
         bottom < 0 ||
         top > window.innerHeight ||
