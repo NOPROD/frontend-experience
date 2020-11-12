@@ -2,43 +2,18 @@ import { onResize } from '@/gl-utils'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 import {
-  Clock,
-  DoubleSide,
-  Mesh,
   PerspectiveCamera,
-  PlaneGeometry,
   Renderer,
   Scene,
-  ShaderMaterial,
-  SpotLight,
-  TextureLoader,
   WebGLRenderer,
   Color,
-  Group,
-  GridHelper,
   DirectionalLight
 } from 'three'
 
 import { load } from '@/services/Svg'
 class MultipleScenes {
   private sceneElements: any[] = []
-
-  private id!: string
-
-  private scene!: Scene
-  private camera!: PerspectiveCamera
   private renderer!: Renderer
-  private clock!: Clock
-  private controls!: OrbitControls
-  private geometry!: PlaneGeometry
-  private material!: ShaderMaterial
-  private mesh!: Mesh
-
-  private light!: SpotLight
-
-  private svg!: Group
-
-  private canvas!: HTMLCanvasElement
 
   public init(elements: NodeListOf<Element>) {
     const canvas = document.createElement('canvas')
@@ -137,8 +112,8 @@ class MultipleScenes {
           height, // src rect
           0,
           0,
-          500,
-          500
+          width,
+          height
         ) // dst rect
       }
     }
