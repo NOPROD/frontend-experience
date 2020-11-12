@@ -21,7 +21,7 @@ import {
 
 import { load } from '@/services/Svg'
 class MultipleScenes {
-  private scenesElements: any[] = []
+  private sceneElements: any[] = []
 
   private id!: string
 
@@ -40,34 +40,39 @@ class MultipleScenes {
 
   private canvas!: HTMLCanvasElement
 
-  public async init(elem: Element) {
-    console.log(elem.dataset)
+  public init(elements: NodeListOf<Element>) {
+    const canvas = document.createElement('canvas')
+    this.renderer = new WebGLRenderer({
+      canvas,
+      alpha: true,
+      preserveDrawingBuffer: true
+    })
+
+    elements.forEach(async (elem: Element) => {
+      const sceneRender = await this.sceneInit(elem)
+      const ctx = document.createElement('canvas').getContext('2d')
+      elem.appendChild(ctx?.canvas)
+      this.sceneElements.push({ elem, ctx, sceneRender })
+    })
+  }
+
+  private async sceneInit(elem: Element) {
+    const { scene, camera } = this.makeScene(elem)
+    scene.background = new Color(0xb0b0b0)
     //@ts-ignore
     await load(`/logo/${elem.dataset.sceneName}.svg`).then((svgMesh: any) => {
-      this.svg = svgMesh
+      scene.add(svgMesh)
     })
-    console.log(this.svg)
-    this.canvas = document.createElement('canvas')
-    this.renderer = new WebGLRenderer({ canvas: this.canvas, alpha: true })
-    //@ts-ignore
-    this.renderer.setScissorTest(true)
-
-    this.dataToScene(elem)
-
-    this.addEvents()
+    console.log(scene)
+    return () => {
+      camera.updateProjectionMatrix()
+      this.renderer.render(scene, camera)
+    }
   }
 
-  private dataToScene(elem: Element) {
-    //@ts-ignore
-    const sceneName = elem.dataset.sceneName
-    console.log(sceneName)
-    const sceneRenderFunction = this.sceneByName(sceneName)
-
-    this.addScene(elem, sceneRenderFunction)
-  }
-
-  private makeScene() {
+  private makeScene(elem: Element) {
     const scene = new Scene()
+    scene.background = new Color(0xb0b0b0)
 
     const fov = 45
     const aspect = 2
@@ -89,28 +94,22 @@ class MultipleScenes {
     return { scene, camera }
   }
 
-  private sceneByName(elem: Element) {
-    const { scene, camera } = this.makeScene()
-    scene.add(this.svg)
-    return (elem: any) => {
-      camera.updateProjectionMatrix()
-      this.renderer.render(scene, camera)
-    }
-  }
-
-  private render(time: number = 1) {
+  public render(time?: number) {
     time *= 0.001
-    console.log(this.scenesElements)
-    for (const { elem, ctx } of this.scenesElements) {
-      const rect = elem.getBoundingClientRect()
-      const { left, right, top, bottom, width, height } = rect
-      const rendererCanvas = this.renderer.domElement
 
+    for (const { elem, ctx, sceneRender } of this.sceneElements) {
+      // get the viewport relative position of this element
+      const rect = elem.getBoundingClientRect()
+      var { left, right, top, bottom, width, height } = rect
+      const rendererCanvas = this.renderer.domElement
+      width = 500
+      height = 500
       const isOffscreen =
         bottom < 0 ||
         top > window.innerHeight ||
         right < 0 ||
         left > window.innerWidth
+
       if (!isOffscreen) {
         // make sure the renderer's canvas is big enough
         if (rendererCanvas.width < width || rendererCanvas.height < height) {
@@ -122,10 +121,11 @@ class MultipleScenes {
           ctx.canvas.width = width
           ctx.canvas.height = height
         }
-        //@ts-ignore
+
         this.renderer.setScissor(0, 0, width, height)
-        //@ts-ignore
         this.renderer.setViewport(0, 0, width, height)
+
+        sceneRender()
 
         // copy the rendered scene to this element's canvas
         ctx.globalCompositeOperation = 'copy'
@@ -137,26 +137,13 @@ class MultipleScenes {
           height, // src rect
           0,
           0,
-          width,
-          height
+          500,
+          500
         ) // dst rect
       }
     }
-    window.requestAnimationFrame(this.render.bind(this))
-  }
 
-  private addScene(elem: any, fn: any) {
-    const ctx = document.createElement('canvas').getContext('2d')
-    elem.appendChild(ctx?.canvas)
-    this.scenesElements.push({ elem, ctx, fn })
-  }
-
-  private addEvents(): void {
-    window.addEventListener(
-      'resize',
-      onResize.bind(this, this.camera, this.renderer),
-      false
-    )
+    requestAnimationFrame(this.render.bind(this))
   }
 }
 

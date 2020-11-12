@@ -1,10 +1,11 @@
 <template>
   <div class="flex-col">
-    <span
+    <div
       v-for="(scene, key) in scenesData"
       :key="key"
       :data-scene-name="`${scene.name}`"
-    ></span>
+      class="scene"
+    ></div>
   </div>
 </template>
 
@@ -21,13 +22,17 @@
 
     mounted() {
       setTimeout(() => {
-        document.querySelectorAll('[data-scene-name]').forEach(elem => {
-          multipleScenes.init(elem)
-        })
+        multipleScenes.init(document.querySelectorAll('[data-scene-name]'))
+        multipleScenes.render()
       }, 0)
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .scene {
+    width: 500;
+    height: 500;
+  }
+</style>
