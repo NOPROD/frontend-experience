@@ -41,11 +41,12 @@ class MultipleScenes {
   private canvas!: HTMLCanvasElement
 
   public async init(elem: Element) {
+    console.log(elem.dataset)
     //@ts-ignore
     await load(`/logo/${elem.dataset.sceneName}.svg`).then((svgMesh: any) => {
       this.svg = svgMesh
     })
-
+    console.log(this.svg)
     this.canvas = document.createElement('canvas')
     this.renderer = new WebGLRenderer({ canvas: this.canvas, alpha: true })
     //@ts-ignore
@@ -54,7 +55,6 @@ class MultipleScenes {
     this.dataToScene(elem)
 
     this.addEvents()
-    window.requestAnimationFrame(this.render.bind(this))
   }
 
   private dataToScene(elem: Element) {
@@ -98,7 +98,7 @@ class MultipleScenes {
     }
   }
 
-  private render(time: number) {
+  private render(time: number = 1) {
     time *= 0.001
     console.log(this.scenesElements)
     for (const { elem, ctx } of this.scenesElements) {

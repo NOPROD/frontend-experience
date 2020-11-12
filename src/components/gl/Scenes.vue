@@ -3,7 +3,7 @@
     <span
       v-for="(scene, key) in scenesData"
       :key="key"
-      :data-sceneName="`${scene.name}`"
+      :data-scene-name="`${scene.name}`"
     ></span>
   </div>
 </template>
@@ -20,9 +20,11 @@
     public scenesData!: Scenes[]
 
     mounted() {
-      document.querySelectorAll('[data-sceneName]').forEach(elem => {
-        multipleScenes.init(elem)
-      })
+      setTimeout(() => {
+        document.querySelectorAll('[data-scene-name]').forEach(elem => {
+          multipleScenes.init(elem)
+        })
+      }, 0)
     }
   }
 </script>

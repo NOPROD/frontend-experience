@@ -16,10 +16,7 @@
 
   @Component({ components: { ScenesComponent } })
   export default class Home extends Vue {
-    public logos: Scenes[] = [
-      { name: '/logo/paper.svg' },
-      { name: '/logo/paper.svg' }
-    ]
+    public logos: Scenes[] = [{ name: 'paper' }, { name: 'paper' }]
 
     mounted() {
       // var wave = new WaveMotion()
