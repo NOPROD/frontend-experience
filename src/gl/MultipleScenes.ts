@@ -13,6 +13,9 @@ class MultipleScenes {
   private sceneElements: any[] = []
   private renderer!: Renderer
 
+  /**
+   * @param elements all scene.name from vue file
+   */
   public async init(elements: NodeListOf<Element>): Promise<boolean> {
     return new Promise(res => {
       const canvas = document.createElement('canvas')
@@ -33,6 +36,11 @@ class MultipleScenes {
     })
   }
 
+  /**
+   * init scene with default params
+   * load svg by scene.name
+   * @return renderer function
+   */
   private async sceneInit(elem: Element) {
     const { scene, camera } = this.makeScene(elem)
     scene.background = new Color(0xb0b0b0)
@@ -46,6 +54,11 @@ class MultipleScenes {
     }
   }
 
+  /**
+   * make scene with default params
+   * add camera and light, look at center
+   * @return scene, camera
+   */
   private makeScene() {
     const scene = new Scene()
     scene.background = new Color(0xb0b0b0)
@@ -70,6 +83,12 @@ class MultipleScenes {
     return { scene, camera }
   }
 
+  /**
+   * Get all scenes with canvas
+   * set scenes size
+   * copy scene render to canvas
+   * animate
+   */
   public render(time?: number) {
     for (const { elem, ctx, sceneRender } of this.sceneElements) {
       // get the viewport relative position of this element
