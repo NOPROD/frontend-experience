@@ -10,13 +10,11 @@ const complex = new Complex(THREE)
 export const load = async (path: string) => {
   return new Promise((res, rej) => {
     loadSvg(path, (err: any, svg: any) => {
-      console.log(svg)
-      console.log(err)
       if (err) rej(err)
       const svgPath = parsePath.parse(svg)
       const svgMesh = svgMesh3d(svgPath, {
         delaunay: false,
-        scale: 4
+        scale: 1
       })
       const geometry = complex(svgMesh)
 
