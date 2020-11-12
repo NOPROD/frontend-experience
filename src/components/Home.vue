@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col">
-    <SvgObject :path="paper" /><canvas id="logo"></canvas>
+    <ScenesComponent :scenesData="logos" /><canvas id="logo"></canvas>
   </div>
 </template>
 
@@ -11,11 +11,15 @@
 
   import { load } from '@/services/Svg'
 
-  import SvgObject from './gl/SvgObject.vue'
+  import ScenesComponent from './gl/Scenes.vue'
+  import { Scenes } from '@/models'
 
-  @Component({ components: { SvgObject } })
+  @Component({ components: { ScenesComponent } })
   export default class Home extends Vue {
-    public paper: string = '/logo/paper.svg'
+    public logos: Scenes[] = [
+      { name: '/logo/paper.svg' },
+      { name: '/logo/paper.svg' }
+    ]
 
     mounted() {
       // var wave = new WaveMotion()
